@@ -4,8 +4,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- || Dependencies || --
-local Janitor = require(ReplicatedStorage.Packages.janitor)
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Janitor = require(ReplicatedStorage.Packages.Janitor)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 local HeapManager = require(script.Parent.Utils.HeapManager)
 

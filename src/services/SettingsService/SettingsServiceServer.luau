@@ -15,9 +15,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 -- || Dependencies || --
-local Observers = require(ReplicatedStorage.Packages.observers)
-local Sift = require(ReplicatedStorage.Packages.sift)
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Observers = require(ReplicatedStorage.Packages.Observers)
+local Sift = require(ReplicatedStorage.Packages.Sift)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 local SettingsProfile = require(ReplicatedStorage.Services.SettingsService.SettingsProfile)
 local SettingsTemplate = require(ReplicatedStorage.Services.SettingsService.SettingsTemplate)
@@ -132,12 +132,12 @@ end
 --[[
 	Gets a player's setting value.
 	
-	@param player Player - The player whose settings to read
-	@param path string | {string}? - Path to the setting. Can be:
+	@param player Player The player whose settings to read
+	@param path string | {string}? Path to the setting. Can be:
 	                                 - "audio.master" (string)
 	                                 - {"audio", "master"} (table)
 	                                 - nil (returns all settings)
-	@return any - The value at the specified path, or nil if not found or player has no profile
+	@return any The value at the specified path, or nil if not found or player has no profile
 	
 	Examples:
 	```lua
@@ -177,10 +177,10 @@ end
 	Changes are validated against the template, saved to DataService, and replicated to the client.
 	Invalid changes (wrong type or non-existent path) are rejected with a warning.
 	
-	@param player Player - The player whose settings to modify
-	@param path string | {string} - Path to the setting
-	@param value any - New value to set
-	@return boolean - true if successful, false if failed validation or no profile
+	@param player Player The player whose settings to modify
+	@param path string | {string} Path to the setting
+	@param value any New value to set
+	@return boolean true if successful, false if failed validation or no profile
 	
 	Examples:
 	```lua
@@ -245,9 +245,9 @@ end
 	Useful for server-side logic that needs to react to setting changes, such as analytics,
 	admin monitoring, or game mechanics that depend on player preferences.
 	
-	@param player Player - The player whose settings to observe
-	@param path string | {string} - Path to observe for changes
-	@return Signal<any>? - Signal that fires with the new value, or nil if player has no profile
+	@param player Player The player whose settings to observe
+	@param path string | {string} Path to observe for changes
+	@return Signal<any>? Signal that fires with the new value, or nil if player has no profile
 	
 	Examples:
 	```lua
@@ -284,8 +284,8 @@ end
 --[[
 	Checks if a player has a loaded settings profile.
 	
-	@param player Player - The player to check
-	@return boolean - true if player's settings are loaded, false otherwise
+	@param player Player The player to check
+	@return boolean true if player's settings are loaded, false otherwise
 	
 	Examples:
 	```lua

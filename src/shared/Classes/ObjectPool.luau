@@ -2,7 +2,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- || Dependencies || --
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 -- || Public API || --
 local ObjectPool = {}

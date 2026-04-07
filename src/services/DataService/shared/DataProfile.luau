@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local DataServiceTypes = require(script.Parent.DataServiceTypes)
 local PathUtils = require(script.Parent.PathUtils)
 
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 -- || Variables || --
 type Disconnect = DataServiceTypes.Disconnect

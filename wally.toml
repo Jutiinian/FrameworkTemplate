@@ -1,27 +1,27 @@
 [package]
-name = "justin/practiceproject"
+name = "justin/frameworktemplate"
 version = "0.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-promise = "howmanysmall/typed-promise@4.0.6"
-janitor = "howmanysmall/janitor@1.18.3"
-signal = "howmanysmall/better-signal@2.1.0"
+Promise = "howmanysmall/typed-promise@4.0.6"
+Janitor = "howmanysmall/janitor@1.18.3"
+Signal = "howmanysmall/better-signal@2.1.0"
 
-react = "jsdotlua/react@17.2.1"
-react-roblox = "jsdotlua/react-roblox@17.2.1"
-react-spring = "chriscerie/react-spring@2.0.0"
-react-flow = "outofbears/react-flow@0.2.0"
+React = "jsdotlua/react@17.2.1"
+React-Roblox = "jsdotlua/react-roblox@17.2.1"
+React-Spring = "chriscerie/react-spring@2.0.0"
+React-Flow = "outofbears/react-flow@0.2.0"
 
-topbarplus = "1foreverhd/topbarplus@3.4.0"
+Topbarplus = "1foreverhd/topbarplus@3.4.0"
 
-sift = "csqrl/sift@0.0.11"
+Sift = "csqrl/sift@0.0.11"
 
-charm = "littensy/charm@0.10.0"
-react-charm = "littensy/react-charm@0.3.0"
+Charm = "littensy/charm@0.10.0"
+React-Charm = "littensy/react-charm@0.3.0"
 
-observers = "sleitnick/observers@^0.4.0"
+Observers = "sleitnick/observers@^0.4.0"
 
 [server-dependencies]
-profilestore = "lm-loleris/profilestore@1.0.3"
+ProfileStore = "lm-loleris/profilestore@1.0.3"

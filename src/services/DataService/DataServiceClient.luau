@@ -16,8 +16,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 -- || Dependencies || --
-local Promise = require(ReplicatedStorage.Packages.promise)
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Promise = require(ReplicatedStorage.Packages.Promise)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 local DataProfile = require(script.Parent.DataProfile)
 local DataServiceTypes = require(script.Parent.DataServiceTypes)
@@ -88,9 +88,9 @@ end
 --[[
 	Gets a value from the player's profile data.
 	
-	@param indexPath string | {string} - Path to the data. Can be a dot-separated string like "Settings.Audio.Volume"
+	@param indexPath string | {string} Path to the data. Can be a dot-separated string like "Settings.Audio.Volume"
 	                                      or a table like {"Settings", "Audio", "Volume"}
-	@return any - The value at the specified path, or nil if not found
+	@return any The value at the specified path, or nil if not found
 	
 	Examples:
 	```lua
@@ -110,18 +110,15 @@ end
 	Note: This is a synchronous read from the local cache. Make sure data is loaded first using WaitForData() or WaitForDataAsync().
 ]]
 function DataServiceClient.Get(self: DataServiceClient, indexPath: IndexPath?): any
-	assert(
-		self._data,
-		"[DataServiceClient] Player data not loaded yet. Possibly wait for initialization."
-	)
+	assert(self._data, "[DataServiceClient] Player data not loaded yet. Possibly wait for initialization.")
 	return self._data:Get(indexPath)
 end
 
 --[[
 	Gets a signal that fires whenever a value changes at the specified path.
 	
-	@param indexPath string | {string} - Path to observe for changes
-	@return Signal<any> - Signal that fires with the new value when it changes
+	@param indexPath string | {string} Path to observe for changes
+	@return Signal<any> Signal that fires with the new value when it changes
 	
 	Examples:
 	```lua
@@ -132,22 +129,16 @@ end
 	
 	Note: The signal will only fire when the server updates this value. Local changes are not possible on the client.
 ]]
-function DataServiceClient.GetValueChangedSignal(
-	self: DataServiceClient,
-	indexPath: IndexPath
-): Signal.ClassicSignal<any>
-	assert(
-		self._data,
-		"[DataServiceClient] Player data not loaded yet. Possibly wait for initialization."
-	)
+function DataServiceClient.GetValueChangedSignal(self: DataServiceClient, indexPath: IndexPath): Signal.ClassicSignal<any>
+	assert(self._data, "[DataServiceClient] Player data not loaded yet. Possibly wait for initialization.")
 	return self._data:GetValueChangedSignal(indexPath)
 end
 
 --[[
 	Gets a signal that fires whenever a value is inserted into an array at the specified path.
 	
-	@param indexPath string | {string} - Path to the array to observe
-	@return Signal<number, any> - Signal that fires with (index, value) when an item is inserted
+	@param indexPath string | {string} Path to the array to observe
+	@return Signal<number, any> Signal that fires with (index, value) when an item is inserted
 	
 	Examples:
 	```lua
@@ -156,22 +147,16 @@ end
 	end)
 	```
 ]]
-function DataServiceClient.GetArrayInsertedSignal(
-	self: DataServiceClient,
-	indexPath: IndexPath
-): Signal.ClassicSignal<number, any>
-	assert(
-		self._data,
-		"[DataServiceClient] Player data not loaded yet. Possibly wait for initialization."
-	)
+function DataServiceClient.GetArrayInsertedSignal(self: DataServiceClient, indexPath: IndexPath): Signal.ClassicSignal<number, any>
+	assert(self._data, "[DataServiceClient] Player data not loaded yet. Possibly wait for initialization.")
 	return self._data:GetArrayInsertedSignal(indexPath)
 end
 
 --[[
 	Gets a signal that fires whenever a value is removed from an array at the specified path.
 	
-	@param indexPath string | {string} - Path to the array to observe
-	@return Signal<number, any> - Signal that fires with (index, removedValue) when an item is removed
+	@param indexPath string | {string} Path to the array to observe
+	@return Signal<number, any> Signal that fires with (index, removedValue) when an item is removed
 	
 	Examples:
 	```lua
@@ -180,14 +165,8 @@ end
 	end)
 	```
 ]]
-function DataServiceClient.GetArrayRemovedSignal(
-	self: DataServiceClient,
-	indexPath: IndexPath
-): Signal.ClassicSignal<number, any>
-	assert(
-		self._data,
-		"[DataServiceClient] Player data not loaded yet. Possibly wait for initialization."
-	)
+function DataServiceClient.GetArrayRemovedSignal(self: DataServiceClient, indexPath: IndexPath): Signal.ClassicSignal<number, any>
+	assert(self._data, "[DataServiceClient] Player data not loaded yet. Possibly wait for initialization.")
 	return self._data:GetArrayRemovedSignal(indexPath)
 end
 
@@ -196,8 +175,8 @@ end
 	
 	Useful for observing changes to multiple fields within an object without creating separate signals.
 	
-	@param indexPath string | {string} - Path to the parent object to observe
-	@return Signal<string, any> - Signal that fires with (childKey, newValue) when any child changes
+	@param indexPath string | {string} Path to the parent object to observe
+	@return Signal<string, any> Signal that fires with (childKey, newValue) when any child changes
 	
 	Examples:
 	```lua
@@ -212,14 +191,8 @@ end
 	end)
 	```
 ]]
-function DataServiceClient.GetIndexChangedSignal(
-	self: DataServiceClient,
-	indexPath: IndexPath
-): Signal.ClassicSignal<string, any>
-	assert(
-		self._data,
-		"[DataServiceClient] Player data not loaded yet. Possibly wait for initialization."
-	)
+function DataServiceClient.GetIndexChangedSignal(self: DataServiceClient, indexPath: IndexPath): Signal.ClassicSignal<string, any>
+	assert(self._data, "[DataServiceClient] Player data not loaded yet. Possibly wait for initialization.")
 	return self._data:GetChildChangedSignal(indexPath)
 end
 
@@ -229,9 +202,9 @@ end
 	Calls the factory function whenever the value changes. The factory should return a cleanup function.
 	This is useful for setting up reactive behavior based on data changes.
 
-	@param indexPath string | {string} - Path to observe
-	@param factory (value: any) -> Disconnect - Function called with value, returns cleanup function
-	@return Disconnect - Function to stop observing
+	@param indexPath string | {string} Path to observe
+	@param factory (value: any) -> Disconnect Function called with value, returns cleanup function
+	@return Disconnect Function to stop observing
 	
 	Examples:
 	```lua
@@ -248,15 +221,8 @@ end
 	disconnect()
 	```
 ]]
-function DataServiceClient.ObserveData(
-	self: DataServiceClient,
-	indexPath: IndexPath,
-	factory: (value: any) -> Disconnect
-): Disconnect
-	assert(
-		self._data,
-		"[DataServiceClient] Player data not loaded yet. Possibly wait for initialization."
-	)
+function DataServiceClient.ObserveData(self: DataServiceClient, indexPath: IndexPath, factory: (value: any) -> Disconnect): Disconnect
+	assert(self._data, "[DataServiceClient] Player data not loaded yet. Possibly wait for initialization.")
 	return self._data:ObserveData(indexPath, factory)
 end
 
@@ -266,10 +232,10 @@ end
 	Calls the factory function for each key/value pair in the table, and whenever they change.
 	The factory should return a cleanup function for each entry.
 	
-	@param indexPath string | {string} - Path to the table
-	@param factory (key: K, value: V) -> Disconnect? - Function called for each entry
-	@param monitorLastValue boolean? - If true, factory is called when values change (not just keys)
-	@return Disconnect - Function to stop observing
+	@param indexPath string | {string} Path to the table
+	@param factory (key: K, value: V) -> Disconnect? Function called for each entry
+	@param monitorLastValue boolean? If true, factory is called when values change (not just keys)
+	@return Disconnect Function to stop observing
 	
 	Examples:
 	```lua
@@ -302,10 +268,7 @@ function DataServiceClient.ObserveTableData<K, V>(
 	factory: (key: K, value: V) -> Disconnect?,
 	monitorLastValue: boolean?
 ): Disconnect
-	assert(
-		self._data,
-		"[DataServiceClient] Player data not loaded yet. Possibly wait for initialization."
-	)
+	assert(self._data, "[DataServiceClient] Player data not loaded yet. Possibly wait for initialization.")
 	return self._data:ObserveTableData(indexPath, factory, monitorLastValue)
 end
 
@@ -314,7 +277,7 @@ end
 	
 	⚠️ Warning: This yields the current thread. Consider using WaitForDataAsync() instead for better control.
 	
-	@return DataProfile - The player's data profile
+	@return DataProfile The player's data profile
 	
 	Example:
 	```lua
@@ -345,7 +308,7 @@ end
 	
 	This is the preferred way to wait for data as it integrates well with promise chains and doesn't yield.
 	
-	@return Promise<DataProfile> - Promise that resolves with the player's data profile
+	@return Promise<DataProfile> Promise that resolves with the player's data profile
 	
 	Examples:
 	```lua
@@ -364,9 +327,7 @@ end
 	- Better error handling with catch()
 	- Can be canceled or timed out
 ]]
-function DataServiceClient.WaitForDataAsync(
-	self: DataServiceClient
-): Promise.TypedPromise<dataProfile>
+function DataServiceClient.WaitForDataAsync(self: DataServiceClient): Promise.TypedPromise<dataProfile>
 	local data = self._data
 	if data then
 		return Promise.resolve(data)

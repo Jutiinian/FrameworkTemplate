@@ -16,8 +16,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 -- || Dependencies || --
-local Promise = require(ReplicatedStorage.Packages.promise)
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Promise = require(ReplicatedStorage.Packages.Promise)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 local SettingsProfile = require(script.Parent.SettingsProfile)
 local SettingsTemplate = require(script.Parent.SettingsTemplate)
@@ -88,11 +88,11 @@ end
 --[[
 	Gets a setting value (synchronous, yields until ready).
 	
-	@param path string | {string}? - Path to the setting. Can be:
+	@param path string | {string}? Path to the setting. Can be:
 	                                 - "audio.master" (string)
 	                                 - {"audio", "master"} (table)
 	                                 - nil (returns all settings)
-	@return any - The value at the specified path, or nil if not found
+	@return any The value at the specified path, or nil if not found
 	
 	Examples:
 	```lua
@@ -122,8 +122,8 @@ end
 	
 	This is the preferred way to get settings as it doesn't block and integrates well with promise chains.
 	
-	@param path string | {string}? - Path to the setting
-	@return Promise<any> - Promise that resolves with the setting value
+	@param path string | {string}? Path to the setting
+	@return Promise<any> Promise that resolves with the setting value
 	
 	Examples:
 	```lua
@@ -155,8 +155,8 @@ end
 	Changes are applied locally immediately, then saved to the server after 0.5 seconds.
 	Multiple rapid changes are batched into a single network call for efficiency.
 	
-	@param path string | {string} - Path to the setting
-	@param value any - New value to set
+	@param path string | {string} Path to the setting
+	@param value any New value to set
 	@return void
 	
 	Examples:
@@ -194,8 +194,8 @@ end
 	Fires when the setting is updated either locally (via Set) or from the server (via replication).
 	Parent paths fire when any child changes.
 	
-	@param path string | {string} - Path to observe for changes
-	@return Signal<any> - Signal that fires with the new value
+	@param path string | {string} Path to observe for changes
+	@return Signal<any> Signal that fires with the new value
 	
 	Examples:
 	```lua
@@ -231,7 +231,7 @@ end
 --[[
 	Checks if settings are loaded and ready to use (non-blocking).
 	
-	@return boolean - true if settings are ready, false otherwise
+	@return boolean true if settings are ready, false otherwise
 	
 	Examples:
 	```lua
@@ -278,7 +278,7 @@ end
 	
 	This is the preferred way to wait for settings as it integrates well with promise chains.
 	
-	@return Promise<void> - Promise that resolves when ready
+	@return Promise<void> Promise that resolves when ready
 	
 	Examples:
 	```lua

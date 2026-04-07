@@ -17,12 +17,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 -- || Dependencies || --
-local Observers = require(ReplicatedStorage.Packages.observers)
-local Promise = require(ReplicatedStorage.Packages.promise)
-local Sift = require(ReplicatedStorage.Packages.sift)
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Observers = require(ReplicatedStorage.Packages.Observers)
+local Promise = require(ReplicatedStorage.Packages.Promise)
+local Sift = require(ReplicatedStorage.Packages.Sift)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
-local ProfileStore = require(ServerScriptService.ServerPackages.profilestore)
+local ProfileStore = require(ServerScriptService.ServerPackages.ProfileStore)
 
 local DataProfile = require(ReplicatedStorage.Services.DataService.DataProfile)
 local DataServiceTypes = require(ReplicatedStorage.Services.DataService.DataServiceTypes)
@@ -73,18 +73,7 @@ type dataOptions = {
 --[[
 	Initializes the DataService on the server.
 	
-	This should be called once when the server starts. It sets up the ProfileStore, network replication,
-	and begins observing player joins/leaves.
-	
-	@param options dataOptions - Configuration table to control behavior
-	
-	Options:
-	- useMock: Use mock ProfileStore for testing (no real data store access)
-	- overridenUserId: Use a different UserId for data keys (useful for testing)
-	- dontSave: Load data but don't save changes (read-only mode)
-	- profileStoreIndex: Custom name for the ProfileStore (default: "Default")
-	- profileStoreDataPrefix: Custom prefix for player data keys (default: "PLAYER_")
-	- replicationIgnoreList: Array of top-level keys to exclude from client replication
+	@param options dataOptions Configuration table to control behavior
 	
 	Examples:
 	```lua
@@ -107,8 +96,6 @@ type dataOptions = {
 		profileStoreDataPrefix = "DEV_PLAYER_"
 	})
 	```
-	
-	Note: Must be called before any player data operations.
 ]]
 function DataServiceServer.Init(self: DataServiceServer, options: dataOptions)
 	self._network = require(script.Parent.NetworkServer)
@@ -127,10 +114,7 @@ end
 --[[
 	Saves profile data for a specific player, or all players if none is provided.
 	
-	Useful for forcing a save during critical events (purchases, major achievements, etc.)
-	Note: ProfileStore automatically saves periodically, so manual saves are usually optional.
-	
-	@param player Player? - The Player to save. If nil, saves all players.
+	@param player Player? The Player to save. If nil, saves all players.
 	
 	Examples:
 	```lua
@@ -156,7 +140,6 @@ end
 
 --[[
 	Sends a global message to the specified user's profile.
-	Returns true if the message was sent successfully, false otherwise.
 
 	@param key string
 	@param userId number | string
@@ -176,8 +159,6 @@ end
 
 --[[
 	Adds a global callback function for handling messages with the specified key.
-	The callback receives the player and data as parameters.
-	If the callback returns false, the message is not processed further.
 
 	@param key string
 	@param callback (player: Player, data: { any }) -> boolean?
@@ -197,8 +178,7 @@ function DataServiceServer.AddGlobalCallback(self: DataServiceServer, key: strin
 end
 
 --[=[
-	Add any number of functions to be called when a player is removed.
-	Used to perform cleanup or save data before the player leaves.
+	Adds a callback that runs when a player is removed.
 	
 	@param fn (player: Player, data: any) -> ()
 
@@ -235,8 +215,8 @@ end
 	Returns the raw ProfileStore profile, which contains the data and additional metadata.
 	Usually you'll want to use Get(), Set(), etc. instead of accessing the profile directly.
 	
-	@param player Player - The player whose profile to get
-	@return Profile? - The ProfileStore profile, or nil if not loaded yet
+	@param player Player The player whose profile to get
+	@return Profile? The ProfileStore profile, or nil if not loaded yet
 	
 	Example:
 	```lua
@@ -258,8 +238,8 @@ end
 	
 	⚠️ Warning: This yields the current thread. Consider using WaitForDataAsync() instead.
 	
-	@param player Player - The player whose data to wait for
-	@return DataProfile - The player's data profile
+	@param player Player The player whose data to wait for
+	@return DataProfile The player's data profile
 	
 	Example:
 	```lua
@@ -294,8 +274,8 @@ end
 	
 	This is the preferred way to wait for data. The promise rejects if the player leaves before data loads.
 	
-	@param player Player - The player whose data to wait for
-	@return Promise<DataProfile> - Promise that resolves with the data profile
+	@param player Player The player whose data to wait for
+	@return Promise<DataProfile> Promise that resolves with the data profile
 	
 	Examples:
 	```lua
@@ -341,9 +321,9 @@ end
 --[[
 	Gets a value from a player's profile data.
 	
-	@param player Player - The player whose data to read
-	@param indexPath string | {string}? - Path to the data (nil returns entire profile)
-	@return any - The value at the specified path
+	@param player Player The player whose data to read
+	@param indexPath string | {string}? Path to the data (nil returns entire profile)
+	@return any The value at the specified path
 	
 	Examples:
 	```lua
@@ -373,10 +353,10 @@ end
 	
 	The change is automatically saved to the data store and replicated to the client (unless NoReplication is true).
 	
-	@param player Player - The player whose data to modify
-	@param indexPath string | {string} - Path to the value to set
-	@param value any - The new value
-	@param NoReplication boolean? - If true, don't send update to client (default: false)
+	@param player Player The player whose data to modify
+	@param indexPath string | {string} Path to the value to set
+	@param value any The new value
+	@param NoReplication boolean? If true, don't send update to client (default: false)
 	
 	Examples:
 	```lua
@@ -429,11 +409,11 @@ end
 	The callback receives the current value and must return the new value. This is useful for
 	incrementing, decrementing, or transforming values based on their current state.
 	
-	@param player Player - The player whose data to modify
-	@param indexPath string | {string} - Path to the value to update
-	@param callback (currentValue: any) -> any - Function that transforms the current value
-	@param NoReplication boolean? - If true, don't send update to client (default: false)
-	@return any - The new value after the update
+	@param player Player The player whose data to modify
+	@param indexPath string | {string} Path to the value to update
+	@param callback (currentValue: any) -> any Function that transforms the current value
+	@param NoReplication boolean? If true, don't send update to client (default: false)
+	@return any The new value after the update
 	
 	Examples:
 	```lua
@@ -500,11 +480,11 @@ end
 --[[
 	Inserts a value into an array in a player's profile data.
 	
-	@param player Player - The player whose data to modify
-	@param indexPath string | {string} - Path to the array
-	@param value any - The value to insert
-	@param index number? - Position to insert at (nil = append to end)
-	@param NoReplication boolean? - If true, don't send update to client (default: false)
+	@param player Player The player whose data to modify
+	@param indexPath string | {string} Path to the array
+	@param value any The value to insert
+	@param index number? Position to insert at (nil = append to end)
+	@param NoReplication boolean? If true, don't send update to client (default: false)
 	
 	Examples:
 	```lua
@@ -562,11 +542,11 @@ end
 --[[
 	Removes an element from an array in a player's profile data.
 	
-	@param player Player - The player whose data to modify
-	@param indexPath string | {string} - Path to the array
-	@param index number - Position of the element to remove (1-indexed)
-	@param NoReplication boolean? - If true, don't send update to client (default: false)
-	@return any - The value that was removed
+	@param player Player The player whose data to modify
+	@param indexPath string | {string} Path to the array
+	@param index number Position of the element to remove (1-indexed)
+	@param NoReplication boolean? If true, don't send update to client (default: false)
+	@return any The value that was removed
 	
 	Examples:
 	```lua
@@ -616,9 +596,9 @@ end
 --[[
 	Gets a signal that fires whenever a value changes at the specified path.
 	
-	@param player Player - The player whose data to observe
-	@param indexPath string | {string} - Path to observe
-	@return Signal<any> - Signal that fires with the new value
+	@param player Player The player whose data to observe
+	@param indexPath string | {string} Path to observe
+	@return Signal<any> Signal that fires with the new value
 	
 	Examples:
 	```lua
@@ -635,9 +615,9 @@ end
 --[[
 	Gets a signal that fires whenever a value is inserted into an array.
 	
-	@param player Player - The player whose data to observe
-	@param indexPath string | {string} - Path to the array
-	@return Signal<number, any> - Signal that fires with (index, value)
+	@param player Player The player whose data to observe
+	@param indexPath string | {string} Path to the array
+	@return Signal<number, any> Signal that fires with (index, value)
 	
 	Example:
 	```lua
@@ -654,9 +634,9 @@ end
 --[[
 	Gets a signal that fires whenever a value is removed from an array.
 	
-	@param player Player - The player whose data to observe
-	@param indexPath string | {string} - Path to the array
-	@return Signal<number, any> - Signal that fires with (index, removedValue)
+	@param player Player The player whose data to observe
+	@param indexPath string | {string} Path to the array
+	@return Signal<number, any> Signal that fires with (index, removedValue)
 	
 	Example:
 	```lua
@@ -673,9 +653,9 @@ end
 --[[
 	Gets a signal that fires whenever any child index under the specified path changes.
 	
-	@param player Player - The player whose data to observe
-	@param indexPath string | {string} - Path to the parent object
-	@return Signal<string, any> - Signal that fires with (childKey, newValue)
+	@param player Player The player whose data to observe
+	@param indexPath string | {string} Path to the parent object
+	@return Signal<string, any> Signal that fires with (childKey, newValue)
 	
 	Example:
 	```lua
@@ -695,10 +675,10 @@ end
 	Calls the factory function whenever the value changes. The factory should return a cleanup function.
 	This is useful for setting up reactive behavior based on data changes.
 	
-	@param player Player - The player whose data to observe
-	@param indexPath string | {string} - Path to observe
-	@param factory (value: any) -> Disconnect - Function called with value, returns cleanup function
-	@return Disconnect - Function to stop observing
+	@param player Player The player whose data to observe
+	@param indexPath string | {string} Path to observe
+	@param factory (value: any) -> Disconnect Function called with value, returns cleanup function
+	@return Disconnect Function to stop observing
 	
 	Examples:
 	```lua
@@ -731,11 +711,11 @@ end
 	Calls the factory function for each key/value pair in the table, and whenever they change.
 	The factory should return a cleanup function for each entry.
 	
-	@param player Player - The player whose data to observe
-	@param indexPath string | {string} - Path to the table
-	@param factory (key: K, value: V) -> Disconnect? - Function called for each entry
-	@param monitorLastValue boolean? - If true, factory is called when values change (not just keys)
-	@return Disconnect - Function to stop observing
+	@param player Player The player whose data to observe
+	@param indexPath string | {string} Path to the table
+	@param factory (key: K, value: V) -> Disconnect? Function called for each entry
+	@param monitorLastValue boolean? If true, factory is called when values change (not just keys)
+	@return Disconnect Function to stop observing
 	
 	Examples:
 	```lua

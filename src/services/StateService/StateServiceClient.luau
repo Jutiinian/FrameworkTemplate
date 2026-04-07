@@ -75,9 +75,9 @@ end
 	This state exists only on the client and is never sent to the server.
 	Be careful of any states that should require server authority.
 
-	@param object Instance - The target object
-	@param stateKey string - Identifier for the state
-	@param duration number? - How long the state lasts in seconds. nil = permanent
+	@param object Instance The target object
+	@param stateKey string Identifier for the state
+	@param duration number? How long the state lasts in seconds. nil = permanent
 
 	Examples:
 	```lua
@@ -96,8 +96,8 @@ end
 	Map values can be a duration number or true for a permanent state.
 	False values are skipped entirely.
 
-	@param object Instance - The target object
-	@param map { [string]: number | boolean } - Map of stateKey to duration or boolean
+	@param object Instance The target object
+	@param map { [string]: number | boolean } Map of stateKey to duration or boolean
 
 	Example:
 	```lua
@@ -118,8 +118,8 @@ end
 	Works for both client-local states and states set by incoming server
 	replication. Do nothing if the state is not active.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to remove
+	@param object Instance The target object
+	@param stateKey string The state to remove
 
 	Example:
 	```lua
@@ -133,8 +133,8 @@ end
 --[[
 	Removes multiple states from an object at once.
 
-	@param object Instance - The target object
-	@param keys { string } - List of state keys to remove
+	@param object Instance The target object
+	@param keys { string } List of state keys to remove
 
 	Example:
 	```lua
@@ -151,8 +151,8 @@ end
 	Covers both server-replicated and client-local states.
 	Returns false if the object has no profile.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to check
+	@param object Instance The target object
+	@param stateKey string The state to check
 	@return boolean
 
 	Example:
@@ -170,8 +170,8 @@ end
 --[[
 	Returns whether ANY of the given states are currently active on an object.
 
-	@param object Instance - The target object
-	@param ... string - One or more state keys to check
+	@param object Instance The target object
+	@param ... string One or more state keys to check
 	@return boolean
 
 	Example:
@@ -189,8 +189,8 @@ end
 --[[
 	Returns whether ALL of the given states are currently active on an object.
 
-	@param object Instance - The target object
-	@param ... string - State keys that must all be active
+	@param object Instance The target object
+	@param ... string State keys that must all be active
 	@return boolean
 
 	Example:
@@ -210,8 +210,8 @@ end
 
 	Returns true if the object has no profile.
 
-	@param object Instance - The target object
-	@param ... string - State keys to check
+	@param object Instance The target object
+	@param ... string State keys to check
 	@return boolean
 
 	Example:
@@ -231,8 +231,8 @@ end
 
 	Returns nil if the state is not active or if it is permanent.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to check
+	@param object Instance The target object
+	@param stateKey string The state to check
 	@return number?
 
 	Example:
@@ -254,7 +254,7 @@ end
 	Includes both server-replicated and client-local states.
 	Returns an empty table if the object has no profile.
 
-	@param object Instance - The target object
+	@param object Instance The target object
 	@return { string }
 
 	Example:
@@ -277,9 +277,9 @@ end
 
 	The profile is auto-initialized if it does not exist yet.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to listen for
-	@return OnActivatedSignal - ReadOnly signal: fires (remaining: number?)
+	@param object Instance The target object
+	@param stateKey string The state to listen for
+	@return OnActivatedSignal ReadOnly signal: fires (remaining: number?)
 
 	Example:
 	```lua
@@ -303,9 +303,9 @@ end
 
 	The profile is auto-initialized if it does not exist yet.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to listen for
-	@return OnDeactivatedSignal - ReadOnly signal: fires ()
+	@param object Instance The target object
+	@param stateKey string The state to listen for
+	@return OnDeactivatedSignal ReadOnly signal: fires ()
 
 	Example:
 	```lua
@@ -332,10 +332,10 @@ end
 
 	The profile is auto-initialized if it does not exist yet.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to observe
-	@param callback ObserveCallback - Called with current and future state
-	@return Disconnect - Call to stop observing
+	@param object Instance The target object
+	@param stateKey string The state to observe
+	@param callback ObserveCallback Called with current and future state
+	@return Disconnect Call to stop observing
 
 	Example:
 	```lua
@@ -367,10 +367,10 @@ end
 	Behaves identically to Observe but the callback also receives the stateKey
 	as its first argument so you can handle all states in one function.
 
-	@param object Instance - The target object
-	@param stateKeys { string } - The states to observe
-	@param callback ObserveManyCallback - Called with (stateKey, active, remaining, maxDuration)
-	@return Disconnect - Call to stop observing all states
+	@param object Instance The target object
+	@param stateKeys { string } The states to observe
+	@param callback ObserveManyCallback Called with (stateKey, active, remaining, maxDuration)
+	@return Disconnect Call to stop observing all states
 
 	Example:
 	```lua

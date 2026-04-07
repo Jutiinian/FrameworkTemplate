@@ -5,7 +5,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- || Dependencies || --
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 -- || Types || --
 export type Path = string | { string }

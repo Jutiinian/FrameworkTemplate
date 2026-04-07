@@ -19,9 +19,9 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- || Dependencies || --
-local Observers = require(ReplicatedStorage.Packages.observers)
-local Promise = require(ReplicatedStorage.Packages.promise)
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Observers = require(ReplicatedStorage.Packages.Observers)
+local Promise = require(ReplicatedStorage.Packages.Promise)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 local StateProfile = require(ReplicatedStorage.Services.StateService.StateProfile)
 local StateServiceTypes = require(ReplicatedStorage.Services.StateService.StateServiceTypes)
@@ -98,7 +98,7 @@ end
 	Fires any pending AwaitObjectInitialization promises for this object.
 	Non-player objects are automatically deinitialized when destroyed.
 
-	@param object Instance - The object to initialize
+	@param object Instance The object to initialize
 
 	Example:
 	```lua
@@ -135,7 +135,7 @@ end
 	Called automatically for players on PlayerRemoving and for non-player objects
 	on Destroying. You can call this manually if you need to clean up earlier.
 
-	@param object Instance - The object to deinitialize
+	@param object Instance The object to deinitialize
 
 	Example:
 	```lua
@@ -158,10 +158,10 @@ end
 	If duration is provided, the state will automatically be removed after
 	that many seconds. If omitted, the state is permanent until manually removed.
 
-	@param object Instance - The target object
-	@param stateKey string - Identifier for the state (e.g. "Stunned", "Burning")
-	@param duration number? - How long the state lasts in seconds. nil = permanent
-	@param replication ReplicationTarget - Who to replicate this state to
+	@param object Instance The target object
+	@param stateKey string Identifier for the state (e.g. "Stunned", "Burning")
+	@param duration number? How long the state lasts in seconds. nil = permanent
+	@param replication ReplicationTarget Who to replicate this state to
 
 	Examples:
 	```lua
@@ -202,9 +202,9 @@ end
 
 	All states in the map are replicated with the same target.
 
-	@param object Instance - The target object
-	@param map { [string]: number | boolean } - Map of stateKey to duration or boolean
-	@param replication ReplicationTarget - Who to replicate these states to
+	@param object Instance The target object
+	@param map { [string]: number | boolean } Map of stateKey to duration or boolean
+	@param replication ReplicationTarget Who to replicate these states to
 
 	Examples:
 	```lua
@@ -236,9 +236,9 @@ end
 
 	No-ops silently if the state is not currently active.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to remove
-	@param replication ReplicationTarget - Who to notify of the removal
+	@param object Instance The target object
+	@param stateKey string The state to remove
+	@param replication ReplicationTarget Who to notify of the removal
 
 	Example:
 	```lua
@@ -262,9 +262,9 @@ end
 --[[
 	Removes multiple states from an object at once.
 
-	@param object Instance - The target object
-	@param keys { string } - List of state keys to remove
-	@param replication ReplicationTarget - Who to notify of the removals
+	@param object Instance The target object
+	@param keys { string } List of state keys to remove
+	@param replication ReplicationTarget Who to notify of the removals
 
 	Example:
 	```lua
@@ -290,8 +290,8 @@ end
 
 	Returns false if the object has not been initialized.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to check
+	@param object Instance The target object
+	@param stateKey string The state to check
 	@return boolean
 
 	Example:
@@ -311,8 +311,8 @@ end
 
 	Returns false if the object has not been initialized.
 
-	@param object Instance - The target object
-	@param ... string - One or more state keys to check
+	@param object Instance The target object
+	@param ... string One or more state keys to check
 	@return boolean
 
 	Example:
@@ -332,8 +332,8 @@ end
 
 	Returns false if the object has not been initialized.
 
-	@param object Instance - The target object
-	@param ... string - State keys that must all be active
+	@param object Instance The target object
+	@param ... string State keys that must all be active
 	@return boolean
 
 	Example:
@@ -353,8 +353,8 @@ end
 
 	Returns true if the object has not been initialized (nothing is active).
 
-	@param object Instance - The target object
-	@param ... string - State keys to check
+	@param object Instance The target object
+	@param ... string State keys to check
 	@return boolean
 
 	Example:
@@ -374,9 +374,9 @@ end
 
 	Returns nil if the state is not active, or if the state is permanent (no duration).
 
-	@param object Instance - The target object
-	@param stateKey string - The state to check
-	@return number? - Remaining seconds, or nil
+	@param object Instance The target object
+	@param stateKey string The state to check
+	@return number? Remaining seconds, or nil
 
 	Example:
 	```lua
@@ -396,8 +396,8 @@ end
 
 	Returns an empty table if the object has not been initialized.
 
-	@param object Instance - The target object
-	@return { string } - List of active state keys
+	@param object Instance The target object
+	@return { string } List of active state keys
 
 	Example:
 	```lua
@@ -420,9 +420,9 @@ end
 	Multiple callers can connect to the same signal independently without
 	creating duplicate internal listeners.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to listen for
-	@return OnActivatedSignal - ReadOnly signal: fires (remaining: number?)
+	@param object Instance The target object
+	@param stateKey string The state to listen for
+	@return OnActivatedSignal ReadOnly signal: fires (remaining: number?)
 
 	Example:
 	```lua
@@ -446,9 +446,9 @@ end
 
 	The signal fires with no arguments.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to listen for
-	@return OnDeactivatedSignal - ReadOnly signal: fires ()
+	@param object Instance The target object
+	@param stateKey string The state to listen for
+	@return OnDeactivatedSignal ReadOnly signal: fires ()
 
 	Example:
 	```lua
@@ -475,10 +475,10 @@ end
 	When active is true, the callback may return a cleanup function that runs
 	before the next fire or when the observer is disconnected.
 
-	@param object Instance - The target object
-	@param stateKey string - The state to observe
-	@param callback ObserveCallback - Called with current and future state
-	@return Disconnect - Call to stop observing
+	@param object Instance The target object
+	@param stateKey string The state to observe
+	@param callback ObserveCallback Called with current and future state
+	@return Disconnect Call to stop observing
 
 	Example:
 	```lua
@@ -512,10 +512,10 @@ end
 	Behaves identically to Observe but the callback also receives the stateKey
 	as its first argument so you can handle all states in one function.
 
-	@param object Instance - The target object
-	@param stateKeys { string } - The states to observe
-	@param callback ObserveManyCallback - Called with (stateKey, active, remaining, maxDuration)
-	@return Disconnect - Call to stop observing all states
+	@param object Instance The target object
+	@param stateKeys { string } The states to observe
+	@param callback ObserveManyCallback Called with (stateKey, active, remaining, maxDuration)
+	@return Disconnect Call to stop observing all states
 
 	Example:
 	```lua
@@ -549,8 +549,8 @@ end
 	Useful when you need to react to or query an object's state but cannot
 	guarantee that InitializeObject has already been called.
 
-	@param object Instance - The object to wait for
-	@return Promise - Resolves when initialized, rejects if object is destroyed first
+	@param object Instance The object to wait for
+	@return Promise Resolves when initialized, rejects if object is destroyed first
 
 	Example:
 	```lua

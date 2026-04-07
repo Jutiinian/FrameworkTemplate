@@ -23,7 +23,7 @@ end
 
 -- || Dependencies || --
 local Labels = require(script.Labels)
-local Signal = require(ReplicatedStorage.Packages.signal)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 -- || Types || --
 export type Input = Enum.KeyCode | Enum.UserInputType
@@ -334,7 +334,7 @@ end
 	by a corresponding PopContext call. This prevents one system accidentally
 	re-enabling a context that another system intentionally disabled.
 
-	@param context string - The name of the context to push
+	@param context string The name of the context to push
 
 	Examples:
 	```lua
@@ -357,7 +357,7 @@ end
 	The context deactivates only when its reference count reaches zero.
 	No-op if the context is not currently pushed.
 
-	@param context string - The name of the context to pop
+	@param context string The name of the context to pop
 
 	Examples:
 	```lua
@@ -382,8 +382,8 @@ end
 
 	A context is active when it has been pushed at least once without a matching pop.
 
-	@param context string - The name of the context to check
-	@return boolean - True if the context has at least one active push
+	@param context string The name of the context to check
+	@return boolean True if the context has at least one active push
 
 	Examples:
 	```lua
@@ -399,7 +399,7 @@ end
 --[[
 	Returns a list of all currently active context names.
 
-	@return { string } - Array of context names with at least one active push
+	@return { string } Array of context names with at least one active push
 
 	Examples:
 	```lua
@@ -431,9 +431,9 @@ end
 	- "Chord"     — fires Began when all keys in the binding are held simultaneously.
 	                Ended fires when any key in the chord is released.
 
-	@param actionName string - Unique identifier for this action
-	@param keys { Input } - One or more Enum.KeyCode or Enum.UserInputType values
-	@param options ActionOptions? - Configuration table (see ActionOptions type)
+	@param actionName string Unique identifier for this action
+	@param keys { Input } One or more Enum.KeyCode or Enum.UserInputType values
+	@param options ActionOptions? Configuration table (see ActionOptions type)
 
 	Examples:
 	```lua
@@ -494,7 +494,7 @@ end
 
 	No-op if the action does not exist.
 
-	@param actionName string - The name of the action to remove
+	@param actionName string The name of the action to remove
 
 	Examples:
 	```lua
@@ -537,8 +537,8 @@ end
 	connections remain valid and will fire for the new keys going forward.
 	Any in-progress hold timer is cancelled.
 
-	@param actionName string - The name of the action to rebind
-	@param newKeys { Input } - The replacement set of keys to bind
+	@param actionName string The name of the action to rebind
+	@param newKeys { Input } The replacement set of keys to bind
 
 	Examples:
 	```lua
@@ -577,8 +577,8 @@ end
 	                    Use GetHoldPressedSignal to react to the initial press.
 	For "DoubleTap" actions: fires on the qualifying second press.
 
-	@param actionName string - The name of the action to subscribe to
-	@return Signal<Input> - Fires with the Input that triggered the action
+	@param actionName string The name of the action to subscribe to
+	@return Signal<Input> Fires with the Input that triggered the action
 
 	Examples:
 	```lua
@@ -605,8 +605,8 @@ end
 	For "Hold" actions: only fires if Began had already fired (i.e. the hold was completed).
 	                    Releasing before the duration elapses fires HoldCancelled instead.
 
-	@param actionName string - The name of the action to subscribe to
-	@return Signal<Input> - Fires with the Input that ended the action
+	@param actionName string The name of the action to subscribe to
+	@return Signal<Input> Fires with the Input that ended the action
 
 	Examples:
 	```lua
@@ -627,8 +627,8 @@ end
 
 	HoldPressed and HoldCancelled are not routed through this signal.
 
-	@param actionName string - The name of the action to subscribe to
-	@return Signal<"Began" | "Ended", Input> - Fires with the phase and triggering Input
+	@param actionName string The name of the action to subscribe to
+	@return Signal<"Began" | "Ended", Input> Fires with the phase and triggering Input
 
 	Examples:
 	```lua
@@ -658,8 +658,8 @@ end
 	Only meaningful for actions with type = "Hold". For other action types the
 	signal exists but will never fire.
 
-	@param actionName string - The name of the Hold action
-	@return Signal<Input> - Fires with the Input on initial key press
+	@param actionName string The name of the Hold action
+	@return Signal<Input> Fires with the Input on initial key press
 
 	Examples:
 	```lua
@@ -697,8 +697,8 @@ end
 	Only meaningful for actions with type = "Hold". For other action types the
 	signal exists but will never fire.
 
-	@param actionName string - The name of the Hold action
-	@return Signal<Input> - Fires with the Input when the hold is cancelled early
+	@param actionName string The name of the Hold action
+	@return Signal<Input> Fires with the Input when the hold is cancelled early
 
 	Examples:
 	```lua
@@ -721,8 +721,8 @@ end
 	and Began has fired — not while the key is being held but the timer is
 	still counting down.
 
-	@param actionName string - The name of the action to check
-	@return boolean - True if the action is currently active
+	@param actionName string The name of the action to check
+	@return boolean True if the action is currently active
 
 	Examples:
 	```lua
@@ -741,8 +741,8 @@ end
 	Returns whether the specified raw key or button is currently physically held,
 	regardless of any action bindings, contexts, or action types.
 
-	@param key Input - The Enum.KeyCode or Enum.UserInputType to check
-	@return boolean - True if the key is held
+	@param key Input The Enum.KeyCode or Enum.UserInputType to check
+	@return boolean True if the key is held
 
 	Examples:
 	```lua
@@ -762,8 +762,8 @@ end
 	Useful for driving a progress bar purely from a boolean check rather than
 	connecting to signals.
 
-	@param actionName string - The name of the Hold action to check
-	@return boolean - True if the hold timer is actively counting down
+	@param actionName string The name of the Hold action to check
+	@return boolean True if the hold timer is actively counting down
 
 	Examples:
 	```lua
@@ -786,8 +786,8 @@ end
 	elapses), not from the initial key press. Use GetHoldPressDuration for the
 	time since the key was first pressed.
 
-	@param actionName string - The name of the action to query
-	@return number - Seconds elapsed since the action began, or 0 if not active
+	@param actionName string The name of the action to query
+	@return number Seconds elapsed since the action began, or 0 if not active
 
 	Examples:
 	```lua
@@ -807,7 +807,7 @@ end
 --[[
 	Returns a list of all action names that are currently active.
 
-	@return { string } - Array of currently active action names
+	@return { string } Array of currently active action names
 
 	Examples:
 	```lua
@@ -830,8 +830,8 @@ end
 	Useful for UI hints that need to display the current binding, and automatically
 	reflects changes made via RebindAction.
 
-	@param actionName string - The name of the action to get a label for
-	@return string? - A friendly label such as "Space", "LMB", or "A",
+	@param actionName string The name of the action to get a label for
+	@return string? A friendly label such as "Space", "LMB", or "A",
 	                  or nil if the action does not exist
 
 	Examples:
@@ -872,8 +872,8 @@ end
 --[[
 	Returns the keys currently bound to an action.
 
-	@param actionName string - The name of the action to query
-	@return { Input }? - The bound keys, or nil if the action does not exist
+	@param actionName string The name of the action to query
+	@return { Input }? The bound keys, or nil if the action does not exist
 
 	Examples:
 	```lua
@@ -893,8 +893,8 @@ end
 --[[
 	Returns whether an action with the given name is currently bound.
 
-	@param actionName string - The name of the action to check
-	@return boolean - True if the action exists
+	@param actionName string The name of the action to check
+	@return boolean True if the action exists
 
 	Examples:
 	```lua
