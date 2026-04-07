@@ -5,16 +5,16 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- || Dependencies || --
-local React = require(ReplicatedStorage.Packages.react)
+local React = require(ReplicatedStorage.Packages.React)
 
 -- || Types || --
 type ICurrentValue<T> = {
-	Dependencies: {unknown},
+	Dependencies: { unknown },
 	MemoizedValue: T,
 }
 
-local function useMemoWithCleanup<T>(createValue: () -> T, cleanupValue: (value: T) -> (), dependencies: {unknown}?)
-	local trueDependencies: {unknown} = if dependencies then dependencies else {}
+local function useMemoWithCleanup<T>(createValue: () -> T, cleanupValue: (value: T) -> (), dependencies: { unknown }?)
+	local trueDependencies: { unknown } = if dependencies then dependencies else {}
 	local currentValue = React.useRef(nil :: ICurrentValue<T>?)
 	local needsToRecalculate = false
 

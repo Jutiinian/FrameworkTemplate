@@ -5,7 +5,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- || Dependencies || --
-local React = require(ReplicatedStorage.Packages.react)
+local React = require(ReplicatedStorage.Packages.React)
 
 -- || Variables || --
 local useBinding = React.useBinding
@@ -14,29 +14,29 @@ local useEffect = React.useEffect
 
 -- || Hook || --
 local function useGuiSizeBinding(): (React.Ref<GuiObject>, React.Binding<Vector2>)
-    local ref = useRef(nil :: GuiObject?)
-    local binding, setBinding = useBinding(Vector2.zero)
+	local ref = useRef(nil :: GuiObject?)
+	local binding, setBinding = useBinding(Vector2.zero)
 
-    local current = ref.current
+	local current = ref.current
 
-    useEffect(function()
-        if current == nil or not current:IsA("GuiBase2d") then
-            setBinding(Vector2.zero)
-            return
-        end
+	useEffect(function()
+		if current == nil or not current:IsA("GuiBase2d") then
+			setBinding(Vector2.zero)
+			return
+		end
 
-        local currentGuiObject = current :: GuiObject
+		local currentGuiObject = current :: GuiObject
 
-        local connection = currentGuiObject:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-            setBinding(currentGuiObject.AbsoluteSize)
-        end)
+		local connection = currentGuiObject:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+			setBinding(currentGuiObject.AbsoluteSize)
+		end)
 
-        return function()
-            connection:Disconnect()
-        end
-    end, { current })
+		return function()
+			connection:Disconnect()
+		end
+	end, { current })
 
-    return ref, binding
+	return ref, binding
 end
 
 return useGuiSizeBinding

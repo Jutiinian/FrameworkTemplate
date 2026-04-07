@@ -5,8 +5,8 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Promise = require(ReplicatedStorage.Packages.promise)
-local React = require(ReplicatedStorage.Packages.react)
+local Promise = require(ReplicatedStorage.Packages.Promise)
+local React = require(ReplicatedStorage.Packages.React)
 
 type Promise<T> = Promise.TypedPromise<T>
 type UseAsyncState<T> = {
@@ -29,7 +29,7 @@ type UseAsyncState<T> = {
 	@return unknown? -- The error message of the Promise.
 	@return Promise.Status -- The status of the Promise.
 ]=]
-local function useAsync<T>(promiseOrGetPromise: Promise<T> | () -> Promise<T>, dependencies: {any}?)
+local function useAsync<T>(promiseOrGetPromise: Promise<T> | () -> Promise<T>, dependencies: { any }?)
 	local state, setState = React.useState({
 		Status = Promise.Status.Started,
 	} :: UseAsyncState<T>)

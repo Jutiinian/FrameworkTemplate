@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local EmitterType = require(script.Parent.Parent.core.EmitterType)
-local React = require(ReplicatedStorage.Packages.react)
+local React = require(ReplicatedStorage.Packages.React)
 local useEmitters = require(script.Parent.useEmitters)
 
 --[=[
@@ -15,13 +15,15 @@ local function useEmitter(props: useEmitters.props, deps: { unknown }?): (Emitte
 	local emitters, parentApi = (useEmitters :: any)(1, props, deps)
 
 	local api = React.useMemo(function(): { emit: (number) -> () }?
-		if parentApi then return {
-			emit = function(numToEmit: number)
-				parentApi.emit(function()
-					return numToEmit
-				end)
-			end,
-		} end
+		if parentApi then
+			return {
+				emit = function(numToEmit: number)
+					parentApi.emit(function()
+						return numToEmit
+					end)
+				end,
+			}
+		end
 		return
 	end, deps or {})
 

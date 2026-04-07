@@ -2,7 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Emitter = require(script.Parent.Parent.core.Emitter)
 local EmitterType = require(script.Parent.Parent.core.EmitterType)
-local React = require(ReplicatedStorage.Packages.react)
+local React = require(ReplicatedStorage.Packages.React)
 
 export type props = { EmitterType.Emitter } | (index: number) -> EmitterType.Emitter
 
@@ -133,12 +133,18 @@ local function useEmitters(count: number, props: props, deps: { unknown }?): ({ 
 					Emitter.Set(emitter, key, newValue)
 
 					-- Update derived internal properties
-					if key == "FlipbookImageSize" or key == "FlipbookLayout" or key == "FlipbookSizeX" or key == "FlipbookSizeY" then flipbookChanged = true end
-					if key == "ShapeDimensions" then Emitter.Set(emitter, "_center", (newProps.ShapeDimensions or Vector2.one) * 0.5) end
+					if key == "FlipbookImageSize" or key == "FlipbookLayout" or key == "FlipbookSizeX" or key == "FlipbookSizeY" then
+						flipbookChanged = true
+					end
+					if key == "ShapeDimensions" then
+						Emitter.Set(emitter, "_center", (newProps.ShapeDimensions or Vector2.one) * 0.5)
+					end
 				end
 			end
 
-			if flipbookChanged then rebuildFlipbook(emitter) end
+			if flipbookChanged then
+				rebuildFlipbook(emitter)
+			end
 
 			lastProps[i] = table.clone(newProps)
 		end

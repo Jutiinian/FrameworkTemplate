@@ -7,12 +7,12 @@
 --!strict
 
 -- Services
-local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 -- Modules
 local Emitter = require(script.Parent.Parent.core.Emitter)
 local EmitterType = require(script.Parent.Parent.core.EmitterType)
-local React = require(ReplicatedStorage.Packages.react)
+local React = require(ReplicatedStorage.Packages.React)
 
 local e = React.createElement
 
@@ -124,8 +124,16 @@ local function step()
 						set(img2, "ImageRectOffset", cache[ft] or Vector2.zero)
 
 						-- Crossfade
-						set(img1, "ImageTransparency", math.clamp(particle.Transparency + fa + (props.LocalTransparencyModifier or 0), 0, 1))
-						set(img2, "ImageTransparency", math.clamp(particle.Transparency + fa + (props.LocalTransparencyModifier or 0), 0, 1))
+						set(
+							img1,
+							"ImageTransparency",
+							math.clamp(particle.Transparency + fa + (props.LocalTransparencyModifier or 0), 0, 1)
+						)
+						set(
+							img2,
+							"ImageTransparency",
+							math.clamp(particle.Transparency + fa + (props.LocalTransparencyModifier or 0), 0, 1)
+						)
 					end
 				else
 					set(v, "ImageRectOffset", Vector2.zero)
@@ -178,7 +186,9 @@ return function(props: props)
 	local container = React.useRef(nil :: Frame?)
 
 	React.useEffect(function()
-		if not container.current then return end
+		if not container.current then
+			return
+		end
 
 		registry[container.current] = { props = props, instances = {} }
 		return function()

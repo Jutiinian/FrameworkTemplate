@@ -6,10 +6,10 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
-local React = require(ReplicatedStorage.Packages.react)
+local React = require(ReplicatedStorage.Packages.React)
 local getDependencies = require(ReplicatedStorage.UI.utils.getDependencies)
 
-local DEFAULT_INPUTS = {Enum.UserInputType.MouseButton1, Enum.UserInputType.Touch}
+local DEFAULT_INPUTS = { Enum.UserInputType.MouseButton1, Enum.UserInputType.Touch }
 
 local function ContainsPosition(guiObject: GuiObject, position: Vector3)
 	local absolutePosition = guiObject.AbsolutePosition
@@ -57,8 +57,8 @@ end
 	@param guiObjects? {GuiObject} -- A list of elements to detect clicks outside of. Defaults to the element returned by `useRef`.
 	@return Ref<GuiObject> -- A ref to the element to detect clicks outside of.
 ]=]
-local function useClickOutside<T>(onClick: () -> (), userInputTypes: {Enum.UserInputType}?, guiObjects: {GuiObject}?)
-	local trueUserInputTypes: {Enum.UserInputType} = if userInputTypes then userInputTypes else DEFAULT_INPUTS
+local function useClickOutside<T>(onClick: () -> (), userInputTypes: { Enum.UserInputType }?, guiObjects: { GuiObject }?)
+	local trueUserInputTypes: { Enum.UserInputType } = if userInputTypes then userInputTypes else DEFAULT_INPUTS
 	local ref = assert(React.useRef(React.createRef()).current, "Type correction failed.")
 
 	local onInputBegan = React.useCallback(function(inputObject: InputObject)
