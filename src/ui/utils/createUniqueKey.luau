@@ -1,8 +1,10 @@
+--!strict
+
 -- If you ever want to use an indice in a React name, use this instead.
 local function createUniqueKey(): (string) -> string
-	local names = {}
+	local names: { [string]: number } = {}
 
-	return function(name)
+	return function(name: string): string
 		if names[name] == nil then
 			names[name] = 1
 			return name

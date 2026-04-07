@@ -1,3 +1,5 @@
+--!strict
+
 local function createNextOrder(): () -> number
 	local layoutOrder = 0
 
