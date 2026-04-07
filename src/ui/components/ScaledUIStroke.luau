@@ -4,13 +4,18 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- || Dependencies || --
-local React = require(ReplicatedStorage.Packages.react)
+local React = require(ReplicatedStorage.Packages.React)
 local useStrokeScale = require(ReplicatedStorage.UI.hooks.useStrokeScale)
 
--- || Variables || --
-local STUDIO_SIZE = Vector2.new(1924, 939)
+local UIConfigurations = require(ReplicatedStorage.UI.Configurations)
 
-export type ScaledStrokeProps = {
+-- || Constants/Variables || --
+local STUDIO_SIZE = UIConfigurations.STUDIO_SIZE
+
+local e = React.createElement
+
+-- || Types || --
+export type props = {
 	Thickness: number | React.Binding<number>,
 	Transparency: number | React.Binding<number> | nil,
 	Color: Color3 | React.Binding<Color3> | nil,
@@ -24,12 +29,12 @@ export type ScaledStrokeProps = {
 	children: React.ReactNode?,
 }
 
--- || Public API || --
-return function(props: ScaledStrokeProps)
+-- || Component || --
+return function(props: props)
 	local trueEnabled = props.Enabled or true
 	local scaledThickness = useStrokeScale(props.Thickness, STUDIO_SIZE.X)
 
-	return React.createElement("UIStroke", {
+	return e("UIStroke", {
 		Color = props.Color or Color3.fromRGB(0, 0, 0),
 		Transparency = props.Transparency,
 		ApplyStrokeMode = props.ApplyStrokeMode,

@@ -6,8 +6,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- || Dependencies || --
 local DataServiceClient = require(ReplicatedStorage.Services.DataService.DataServiceClient)
-local Promise = require(ReplicatedStorage.Packages.promise)
-local React = require(ReplicatedStorage.Packages.react)
+local Promise = require(ReplicatedStorage.Packages.Promise)
+local React = require(ReplicatedStorage.Packages.React)
 
 -- || Variables || --
 local useState = React.useState
@@ -25,10 +25,9 @@ return function(key: string | { string }, initialValue: any?)
 				local currentValue = DataServiceClient:Get(key)
 				setValue(currentValue)
 
-				signalConnection = DataServiceClient:GetValueChangedSignal(key)
-					:Connect(function(newValue)
-						setValue(newValue)
-					end)
+				signalConnection = DataServiceClient:GetValueChangedSignal(key):Connect(function(newValue)
+					setValue(newValue)
+				end)
 			end)
 			:catch(warn)
 

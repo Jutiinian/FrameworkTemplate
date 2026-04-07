@@ -4,13 +4,19 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- || Dependencies || --
-local React = require(ReplicatedStorage.Packages.react)
+local React = require(ReplicatedStorage.Packages.React)
 local getDependencies = require(ReplicatedStorage.UI.utils.getDependencies)
 local useScale = require(ReplicatedStorage.UI.hooks.useScale)
 
-local STUDIO_SIZE = Vector2.new(1500, 803)
+local UIConfigurations = require(ReplicatedStorage.UI.Configurations)
 
-export type AutoScaledFrameProps = {
+-- || Constants/Variables || --
+local STUDIO_SIZE = UIConfigurations.STUDIO_SIZE
+
+local e = React.createElement
+
+-- || Types || --
+export type props = {
 	ScaleFactor: number?,
 	MinSize: Vector2?,
 	Size: UDim2,
@@ -22,7 +28,8 @@ export type AutoScaledFrameProps = {
 	children: React.ReactNode?,
 }
 
-return React.forwardRef(function(props: AutoScaledFrameProps, ref: React.Ref<any>)
+-- || Component || --
+return React.forwardRef(function(props: props, ref: React.Ref<any>)
 	local minSize = props.MinSize or Vector2.zero
 	local scaleFactor = props.ScaleFactor or 1
 
@@ -32,7 +39,7 @@ return React.forwardRef(function(props: AutoScaledFrameProps, ref: React.Ref<any
 
 	local scaleBinding = useScale(scaleFactor, STUDIO_SIZE)
 
-	return React.createElement("Frame", {
+	return e("Frame", {
 		Size = props.Size,
 		Position = props.Position,
 		AnchorPoint = props.AnchorPoint,
@@ -41,7 +48,7 @@ return React.forwardRef(function(props: AutoScaledFrameProps, ref: React.Ref<any
 		BackgroundTransparency = props.BackgroundTransparency or 1,
 		ref = ref,
 	}, {
-		React.createElement("UIScale", {
+		e("UIScale", {
 			Scale = scaleBinding:map(function(scaleNumber)
 				return math.max(scaleNumber, minScale)
 			end),
