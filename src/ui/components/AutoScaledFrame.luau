@@ -9,6 +9,7 @@ local getDependencies = require(ReplicatedStorage.UI.utils.getDependencies)
 local useScale = require(ReplicatedStorage.UI.hooks.useScale)
 
 local UIConfigurations = require(ReplicatedStorage.UI.Configurations)
+local joinDicts = require(ReplicatedStorage.UI.utils.joinDicts)
 
 -- || Constants/Variables || --
 local STUDIO_SIZE = UIConfigurations.STUDIO_SIZE
@@ -20,11 +21,10 @@ export type props = {
 	ScaleFactor: number?,
 	MinSize: Vector2?,
 	Size: UDim2,
-	Position: UDim2?,
-	Rotation: number?,
-	AnchorPoint: Vector2?,
-	BackgroundTransparency: number?,
-	ZIndex: number?,
+	native: {
+		Size: nil,
+		[string]: any,
+	}?,
 	children: React.ReactNode?,
 }
 
@@ -39,20 +39,20 @@ return React.forwardRef(function(props: props, ref: React.Ref<any>)
 
 	local scaleBinding = useScale(scaleFactor, STUDIO_SIZE)
 
-	return e("Frame", {
-		Size = props.Size,
-		Position = props.Position,
-		AnchorPoint = props.AnchorPoint,
-		Rotation = props.Rotation,
-		ZIndex = props.ZIndex,
-		BackgroundTransparency = props.BackgroundTransparency or 1,
-		ref = ref,
-	}, {
-		e("UIScale", {
-			Scale = scaleBinding:map(function(scaleNumber)
-				return math.max(scaleNumber, minScale)
-			end),
-		}),
-		props.children :: any,
-	})
+	return e(
+		"Frame",
+		joinDicts({
+			Size = props.Size,
+			BackgroundTransparency = 1,
+			ref = ref,
+		}, props.native),
+		{
+			e("UIScale", {
+				Scale = scaleBinding:map(function(scaleNumber)
+					return math.max(scaleNumber, minScale)
+				end),
+			}),
+			props.children :: any,
+		}
+	)
 end)
