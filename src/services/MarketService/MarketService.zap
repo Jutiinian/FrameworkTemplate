@@ -5,9 +5,9 @@ opt remote_scope = "MarketService"
 opt casing = "PascalCase"
 
 opt yield_type = "promise"
-opt async_lib = "require(game:GetService('ReplicatedStorage').Packages.promise)"
+opt async_lib = "require(game:GetService('ReplicatedStorage').Promise)"
 
-opt disable_fire_all = true
+opt disable_fire_all = false
 
 event InitializeMarketData = {
     from: Server,
@@ -21,6 +21,23 @@ event SetMarketData = {
     type: Reliable,
     call: SingleAsync,
     data: (Index: string.utf8, Value: boolean)
+}
+
+event AddGamePass = {
+    from: Server,
+    type: Reliable,
+    call: SingleAsync,
+    data: (Name: string.utf8, idData: struct {
+        ID: f64,
+        GiftID: f64?,
+    })
+}
+
+event AddDevProduct = {
+    from: Server,
+    type: Reliable,
+    call: SingleAsync,
+    data: (Name: string.utf8, ID: f64)
 }
 
 funct RequestGiftPurchase = {
