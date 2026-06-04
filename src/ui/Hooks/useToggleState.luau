@@ -1,3 +1,4 @@
+--!optimize 2
 --!strict
 
 -- || Services || --
@@ -6,35 +7,36 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- || Dependencies || --
 local React = require(ReplicatedStorage.Packages.React)
 
--- || Hook || --
-local function useToggleState(default: boolean): {
-	on: boolean,
-	enable: () -> (),
-	disable: () -> (),
+-- || Types || --
+export type Toggle = {
 	toggle: () -> (),
+	on: () -> (),
+	off: () -> (),
 }
-	local toggled, setToggled = React.useState(default)
 
-	local enable = React.useCallback(function()
-		setToggled(true)
-	end, {})
+-- || Hook || --
+local function useToggleState(default: boolean?): (boolean, Toggle)
+	local value, setValue = React.useState(default == true)
 
-	local disable = React.useCallback(function()
-		setToggled(false)
-	end, {})
+	local toggle = React.useMemo(function()
+		return {
+			toggle = function()
+				setValue(function(prev: boolean)
+					return not prev
+				end)
+			end,
 
-	local toggle = React.useCallback(function()
-		setToggled(function(currentToggled)
-			return not currentToggled
-		end)
-	end, {})
+			on = function()
+				setValue(true)
+			end,
 
-	return {
-		on = toggled,
-		enable = enable,
-		disable = disable,
-		toggle = toggle,
-	}
+			off = function()
+				setValue(false)
+			end,
+		}
+	end)
+
+	return value, toggle
 end
 
 return useToggleState
